@@ -3,7 +3,7 @@
 
 ## load required packages
 pkgs <- c("nlme", "lme4", "MuMIn", "lattice", "glmmTMB",  "dplyr", "car", "visreg", "ggeffects",
-          "cowplot", "dotwhisker", "tidyverse", "devtools", "ggplot2", "ggpubr", "DHARMa", "emmeans", "ggarrange") 
+          "cowplot", "dotwhisker", "tidyverse", "devtools", "ggplot2", "ggpubr", "DHARMa", "emmeans", "ggarrange", "ggrepel") 
 
 lapply(pkgs, library, character.only = TRUE)
 
@@ -229,7 +229,7 @@ PCA1_repro_means
 
 
 fig2A_B <- plot_grid(PCA1_repro_means, PCA2_repro_means, labels = c('A', 'B'), align = "h", hjust = .25, rel_widths = c(1, 1));fig2A_B
-ggsave("fig2A-B.png", plot = fig2A_B, width = 8, height = 4)
+#ggsave("fig2A-B.png", plot = fig2A_B, width = 8, height = 4)
 
 
 
@@ -290,7 +290,7 @@ PCA1_all_means <- PCA1_all +
 PCA1_all_means
 
 fig2C_D <- plot_grid(PCA1_all_means, PCA2_all_means, align = "h", rel_widths = c(1, 1));fig2C_D
-ggsave("fig2C-D.png", plot = fig2C_D, width = 8, height = 4)
+#ggsave("fig2C-D.png", plot = fig2C_D, width = 8, height = 4)
 
 
 #WHOLE THING!!
@@ -301,7 +301,7 @@ fig2_labeled <- plot_grid(PCA1_repro_means, PCA2_repro_means, PCA1_all_means, PC
 
 #, label_x = c(-.035, -.035, -.035,-.035), label_y = c(1.05, 1.05, 1.05, 1.05)
 
-ggsave("fig2_labeled.png", plot = fig2_labeled, width = 8, height = 5)
+#ggsave("fig2_labeled.png", plot = fig2_labeled, width = 8, height = 5)
 
 
 
@@ -345,7 +345,7 @@ ra_indivs
 #NOTE - this includes the three VS populations that were excluded from the lm because they didn't have any associated abiotic data... and two of them have extreme values shown here (VS33 and VS2).
 
 #ggsave("ra_indivs.png", plot = ra_indivs, width = 5, height = 5)
-ggsave("ra_indivs_V6dot.png", plot = ra_indivs, width = 5, height = 5)
+#ggsave("ra_indivs_V6dot.png", plot = ra_indivs, width = 5, height = 5)
 
 
 
@@ -384,7 +384,7 @@ even <- data23 %>% left_join(summary) %>%
 fig3 <- plot_grid(ra_indivs, even, align = "v", labels = c('A', 'B'));fig3
 
 fig3_labels <- plot_grid(ra_indivs, even, align = "v", labels = c('A', 'B'));fig3_labels
-ggsave("fig3.png", plot = fig3, width = 8, height = 4)
+#ggsave("fig3.png", plot = fig3, width = 8, height = 4)
 
 
 
@@ -449,7 +449,7 @@ legend <- get_legend(
 )
 
 zi_plots <- plot_grid(zi_plots, legend, rel_widths = c(3, .4)); zi_plots
-ggsave("zi_plots_formatted.png", plot = zi_plots, width = 8, height = 4)
+#ggsave("zi_plots_formatted.png", plot = zi_plots, width = 8, height = 4)
 
 
 
@@ -481,7 +481,7 @@ seeds_pop <- ggplot(data = data23, aes(x= population, y = seeds, color = Comps))
   #theme(legend.position = c(1, 1), legend.justification = c("right", "top"), legend.box.just = "right",legend.margin = margin(6, 6, 6, 6))
   theme(legend.position = "top"); seeds_pop
 
-ggsave("seeds_pop.png", plot = seeds_pop, width = 8, height = 5)
+#ggsave("seeds_pop.png", plot = seeds_pop, width = 8, height = 5)
 
 
 
@@ -615,15 +615,11 @@ pie_plots <- plot_grid(
   hjust = -0.1
 );pie_plots
 
-legend <- get_legend(
-  pie_n + theme(legend.position = "bottom", legend.margin = c(0,0,0,0))
-); legend
 
-pie_plots <- plot_grid(pie_plots, legend, ncol = 1); pie_plots
-ggsave("pie_plots.png", plot = pie_plots, width = 6, height = 4)
+#ggsave("pie_plots.png", plot = pie_plots, width = 6, height = 4)
 
 
-#then plot bar charts for each population
+#then plot bar charts for each population - UNFINISHED
 
 Compsn_pops <- data23 %>% group_by(population) %>%
   subset(Comps=="n")
@@ -644,7 +640,7 @@ Compsy_pops <- data23 %>% group_by(population) %>%
 
 # map of McLaughlin and my sites ####
 library(sf)
-mclaughlin_shapefile <- st_read("C:/Users/miatw/Downloads/UC_Natural_Reserve_System_Boundaries/UC_Natural_Reserve_System_Boundaries.shp") #move the shapefile into the data folder and update this
+mclaughlin_shapefile <- st_read("data/UC_Natural_Reserve_System_Boundaries/UC_Natural_Reserve_System_Boundaries.shp") 
 
 McL_map <- ggplot() +
   geom_sf(data = subset(mclaughlin_shapefile, objectid == "21"),
@@ -661,7 +657,7 @@ env_data_2 <- read_csv("data/env.means.all.old.csv")
 sites <- subset(env_data_2, select=c("population", "lat", "long", "pca1.new", "pca2.new"))
 #add sites to the map
 library(RColorBrewer)
-map_sites <- McL_map + geom_point(data=sites, aes(x = long, y = lat, color = pca2.new), size = 3, shape = 16, alpha = .9, inherit.aes = FALSE) + scale_color_viridis_c(option = "plasma") +
+map_sites_pca2 <- McL_map + geom_point(data=sites, aes(x = long, y = lat, color = pca2.new), size = 3, shape = 16, alpha = .9, inherit.aes = FALSE) + scale_color_viridis_c(option = "plasma") +
   labs(x = "Longitude", y = "Latitude", color = "PCA 2") +
   geom_text_repel(data=subset(sites, population == "V6"), aes(long, lat, label = "garden"), nudge_x = -.005, nudge_y = .005, size = 3) +
   geom_text_repel(data = sites, aes(x= long, y = lat, label=ifelse(lat<40,as.character(population),'')),  size = 3, color = "gray30", check_overlap = F ) +
@@ -670,9 +666,9 @@ map_sites <- McL_map + geom_point(data=sites, aes(x = long, y = lat, color = pca
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
     legend.background = element_rect(fill='transparent'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent') #transparent legend panel
-  );map_sites #awesome progress. Just needs the geography now
+  );map_sites_pca2 
 
-ggsave("map_sites.png", plot = map_sites, width = 8, height = 7)
+#ggsave("map_sites_pca2.png", plot = map_sites_pca2, width = 8, height = 7)
 
 map_sites_pca1 <- McL_map + geom_point(data=sites, aes(x = long, y = lat, color = pca1.new), size = 3, shape = 16, alpha = .9, inherit.aes = FALSE) + scale_color_viridis_c(option = "plasma") +
   labs(x = "Longitude", y = "Latitude", color = "PCA 1") +
@@ -685,7 +681,7 @@ map_sites_pca1 <- McL_map + geom_point(data=sites, aes(x = long, y = lat, color 
     legend.box.background = element_rect(fill='transparent') #transparent legend panel
   );map_sites_pca1
 
-ggsave("map_sites_pca1.png", plot = map_sites_pca1, width = 8, height = 7)
+#ggsave("map_sites_pca1.png", plot = map_sites_pca1, width = 8, height = 7)
 
 
 
