@@ -34,7 +34,9 @@ fviz_pca_biplot <- fviz_pca_biplot(pc.env, repel = TRUE,
                                    col.ind = "#696969",  # Individuals color,
                                    labels = colnames(env.data$site), label.size= 8
 ) ;fviz_pca_biplot
-ggsave("new_biplot.png", plot = fviz_pca_biplot, width = 5, height = 5)
+#ggsave("new_biplot.png", plot = fviz_pca_biplot, width = 5, height = 5)
+
+
 # Results for Variables
 res.var <- get_pca_var(pc.env)
 res.var$coord          # Coordinates
@@ -47,7 +49,7 @@ env.data$pca2<-pc.env$x[,2]
 
 screeplot(pc.env,bstick=TRUE)
 
-write.csv(env.data, "env data with site 11.csv")
+#write.csv(env.data, "env data with site 11.csv")
 
 #### Productivity differences among sites ------------------------- ####
 
